@@ -1,0 +1,2 @@
+ALTER TABLE results ALTER COLUMN issues SET NOT NULL;
+ALTER TABLE results DROP COLUMN findings;

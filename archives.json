@@ -1,0 +1,192 @@
+{
+  "tag": "course-2026-11-17",
+  "archives": [
+    {
+      "lesson": "basic-application",
+      "asset": "audit-example.zip",
+      "file": "audit-example.zip",
+      "source": "examples/basic-application/example",
+      "prefix": "audit-example",
+      "format": "zip"
+    },
+    {
+      "lesson": "service-communication",
+      "asset": "contract-example.zip",
+      "file": "contract-example.zip",
+      "source": "examples/service-communication/example",
+      "prefix": "example",
+      "format": "zip"
+    },
+    {
+      "lesson": "service-extraction",
+      "asset": "extraction-example.zip",
+      "file": "extraction-example.zip",
+      "source": "examples/service-extraction/example",
+      "prefix": "example",
+      "format": "zip"
+    },
+    {
+      "lesson": "service-configuration",
+      "asset": "example.tar.gz",
+      "file": "service-configuration--example.tar.gz",
+      "source": "examples/service-configuration/example",
+      "prefix": "example",
+      "format": "tar.gz"
+    },
+    {
+      "lesson": "synchronous-communication",
+      "asset": "checks-rpc-example.zip",
+      "file": "checks-rpc-example.zip",
+      "source": "examples/synchronous-communication/example",
+      "prefix": "checks-rpc-example",
+      "format": "zip"
+    },
+    {
+      "lesson": "asynchronous-communication",
+      "asset": "example.tar.gz",
+      "file": "asynchronous-communication--example.tar.gz",
+      "source": "examples/asynchronous-communication/example",
+      "prefix": "example",
+      "format": "tar.gz"
+    },
+    {
+      "lesson": "message-processing",
+      "asset": "example.tar.gz",
+      "file": "message-processing--example.tar.gz",
+      "source": "examples/message-processing/example",
+      "prefix": "example",
+      "format": "tar.gz"
+    },
+    {
+      "lesson": "partial-failures",
+      "asset": "example.tar.gz",
+      "file": "partial-failures--example.tar.gz",
+      "source": "examples/partial-failures/example",
+      "prefix": "example",
+      "format": "tar.gz"
+    },
+    {
+      "lesson": "retries",
+      "asset": "creation-example.zip",
+      "file": "creation-example.zip",
+      "source": "examples/retries/creation-example",
+      "prefix": "example",
+      "format": "zip"
+    },
+    {
+      "lesson": "retries",
+      "asset": "retry-example.zip",
+      "file": "retry-example.zip",
+      "source": "examples/retries/example",
+      "prefix": "example",
+      "format": "zip"
+    },
+    {
+      "lesson": "fault-isolation",
+      "asset": "example.tar.gz",
+      "file": "fault-isolation--example.tar.gz",
+      "source": "examples/fault-isolation/example",
+      "prefix": "example",
+      "format": "tar.gz"
+    },
+    {
+      "lesson": "idempotent-consumer",
+      "asset": "example.tar.gz",
+      "file": "idempotent-consumer--example.tar.gz",
+      "source": "examples/idempotent-consumer/example",
+      "prefix": "example",
+      "format": "tar.gz"
+    },
+    {
+      "lesson": "data-and-events",
+      "asset": "outbox-example.zip",
+      "file": "outbox-example.zip",
+      "source": "examples/data-and-events/example",
+      "prefix": "example",
+      "format": "zip"
+    },
+    {
+      "lesson": "message-failures",
+      "asset": "message-failures-example.zip",
+      "file": "message-failures-example.zip",
+      "source": "examples/message-failures/example",
+      "prefix": "message-failures-example",
+      "format": "zip"
+    },
+    {
+      "lesson": "service-telemetry",
+      "asset": "example.tar.gz",
+      "file": "service-telemetry--example.tar.gz",
+      "source": "examples/service-telemetry/example",
+      "prefix": "example",
+      "format": "tar.gz"
+    },
+    {
+      "lesson": "distributed-tracing",
+      "asset": "tracing-example.zip",
+      "file": "tracing-example.zip",
+      "source": "examples/distributed-tracing/example",
+      "prefix": "example",
+      "format": "zip"
+    },
+    {
+      "lesson": "service-security",
+      "asset": "service-security-example.zip",
+      "file": "service-security-example.zip",
+      "source": "examples/service-security/example",
+      "prefix": "service-security-example",
+      "format": "zip"
+    },
+    {
+      "lesson": "contract-evolution",
+      "asset": "example.tar.gz",
+      "file": "contract-evolution--example.tar.gz",
+      "source": "examples/contract-evolution/example",
+      "prefix": "example",
+      "format": "tar.gz"
+    },
+    {
+      "lesson": "database-evolution",
+      "asset": "example.tar.gz",
+      "file": "database-evolution--example.tar.gz",
+      "source": "examples/database-evolution/example",
+      "prefix": "example",
+      "format": "tar.gz"
+    },
+    {
+      "lesson": "microservice-testing",
+      "asset": "examples.tar.gz",
+      "file": "examples.tar.gz",
+      "source": "examples/microservice-testing/examples",
+      "prefix": "examples",
+      "format": "tar.gz"
+    },
+    {
+      "lesson": "service-lifecycle",
+      "asset": "example.tar.gz",
+      "file": "service-lifecycle--example.tar.gz",
+      "source": "examples/service-lifecycle/example",
+      "prefix": "example",
+      "format": "tar.gz"
+    },
+    {
+      "lesson": "independent-release",
+      "asset": "independent-release-example.zip",
+      "file": "independent-release-example.zip",
+      "source": "examples/independent-release/example",
+      "prefix": "independent-release-example",
+      "format": "zip"
+    }
+  ],
+  "test_bundle": {
+    "basic": "basic-application",
+    "rpc": "synchronous-communication",
+    "events": "asynchronous-communication",
+    "isolation": "fault-isolation",
+    "consumer": "idempotent-consumer",
+    "outbox": "data-and-events",
+    "failures": "message-failures",
+    "compatibility": "contract-evolution",
+    "migration": "database-evolution"
+  }
+}

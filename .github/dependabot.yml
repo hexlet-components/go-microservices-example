@@ -1,0 +1,39 @@
+version: 2
+updates:
+  - package-ecosystem: gomod
+    directories:
+      - /examples/asynchronous-communication/example
+      - /examples/basic-application/example
+      - /examples/contract-evolution/example
+      - /examples/data-and-events/example
+      - /examples/database-evolution/example
+      - /examples/distributed-tracing/example
+      - /examples/fault-isolation/example
+      - /examples/idempotent-consumer/example
+      - /examples/independent-release/example
+      - /examples/message-failures/example
+      - /examples/partial-failures/example
+      - /examples/retries/creation-example
+      - /examples/retries/example
+      - /examples/service-communication/example
+      - /examples/service-configuration/example
+      - /examples/service-extraction/example
+      - /examples/service-lifecycle/example
+      - /examples/service-security/example
+      - /examples/service-telemetry/example
+      - /examples/synchronous-communication/example
+    cooldown:
+      default-days: 7
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 1
+    groups:
+      go-dependencies:
+        patterns: ["*"]
+  - package-ecosystem: github-actions
+    directory: /
+    cooldown:
+      default-days: 7
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 1

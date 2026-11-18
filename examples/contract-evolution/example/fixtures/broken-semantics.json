@@ -1,0 +1,12 @@
+{
+  "event_id": "e-42",
+  "audit_id": "a-42",
+  "result_id": "r-42",
+  "findings": [
+    {
+      "page_url": "http://localhost:8090/about",
+      "code": "title-absent"
+    }
+  ],
+  "rule_version": "2026-11"
+}

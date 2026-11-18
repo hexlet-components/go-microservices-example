@@ -1,0 +1,46 @@
+name: go-audit-outbox
+services:
+  requests-db:
+    image: postgres:18@sha256:2ea8630df176ad090ec92136dee850397c5af8781e4bcf2e4162593691c61bbc
+    environment:
+      POSTGRES_DB: requests
+      POSTGRES_USER: requests
+      POSTGRES_PASSWORD: requests-local
+    ports: ["127.0.0.1:56431:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U requests -d requests"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+  checks-db:
+    image: postgres:18@sha256:2ea8630df176ad090ec92136dee850397c5af8781e4bcf2e4162593691c61bbc
+    environment:
+      POSTGRES_DB: checks
+      POSTGRES_USER: checks
+      POSTGRES_PASSWORD: checks-local
+    ports: ["127.0.0.1:56432:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U checks -d checks"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+  broker:
+    image: apache/kafka:4.1.1
+    ports: ["127.0.0.1:19292:19292"]
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://:19292,CONTROLLER://:19293
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:19292
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@broker:19293
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:19292 --list >/dev/null"]
+      interval: 3s
+      timeout: 10s
+      retries: 40

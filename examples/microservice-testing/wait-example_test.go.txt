@@ -1,0 +1,16 @@
+package waitdemo
+
+import (
+ "sync/atomic"
+ "testing"
+ "time"
+)
+
+func TestReady(t *testing.T) {
+ var ready atomic.Bool
+ done := make(chan struct{})
+ go func() { defer close(done); time.Sleep(50*time.Millisecond); ready.Store(true) }()
+ defer func() { <-done }()
+ time.Sleep(time.Millisecond)
+ if !ready.Load() { t.Fatal("result is not ready") }
+}

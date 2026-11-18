@@ -1,0 +1,8 @@
+CREATE ROLE requests_app LOGIN PASSWORD 'requests-local';
+CREATE ROLE checks_app LOGIN PASSWORD 'checks-local';
+CREATE DATABASE requests OWNER requests_app;
+CREATE DATABASE checks OWNER checks_app;
+REVOKE CONNECT ON DATABASE requests FROM PUBLIC;
+REVOKE CONNECT ON DATABASE checks FROM PUBLIC;
+GRANT CONNECT ON DATABASE requests TO requests_app;
+GRANT CONNECT ON DATABASE checks TO checks_app;

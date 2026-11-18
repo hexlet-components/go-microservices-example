@@ -1,0 +1,8 @@
+/dist/
+**/.tools/
+**/.bin/
+**/*.log
+**/__pycache__/
+.DS_Store
+**/local.env
+**/certs/

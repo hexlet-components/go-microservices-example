@@ -1,0 +1,14 @@
+name: go-audit-migration
+services:
+  database:
+    image: postgres:18@sha256:2ea8630df176ad090ec92136dee850397c5af8781e4bcf2e4162593691c61bbc
+    environment:
+      POSTGRES_DB: migration_demo
+      POSTGRES_USER: migration_demo
+      POSTGRES_PASSWORD: migration-local
+    ports: ["127.0.0.1:55439:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U migration_demo -d migration_demo"]
+      interval: 2s
+      timeout: 2s
+      retries: 30

@@ -1,0 +1,405 @@
+{
+  "slow-checks": [
+    {
+      "source": "Учебные данные фиксированного интервала, не замер производительности",
+      "now_seconds": 100,
+      "calls": [
+        {
+          "service": "checks",
+          "operation": "check_site",
+          "outcome": "ok",
+          "audit_id": "a-41",
+          "correlation_id": "corr-a-41",
+          "duration_ms": 2400
+        }
+      ],
+      "activities": [
+        {
+          "service": "checks",
+          "operation": "check_site",
+          "audit_id": "a-42",
+          "correlation_id": "corr-a-42",
+          "elapsed_ms": 2600
+        }
+      ],
+      "groups": [
+        {
+          "name": "checks-v1",
+          "end": 5,
+          "committed": 4
+        },
+        {
+          "name": "reports-v1",
+          "end": 4,
+          "committed": 4
+        }
+      ],
+      "outboxes": [
+        {
+          "service": "api",
+          "created_seconds": []
+        },
+        {
+          "service": "checks",
+          "created_seconds": []
+        }
+      ],
+      "running": {
+        "api": true,
+        "checks": true,
+        "reports": true
+      },
+      "report": {
+        "audit_id": "a-42",
+        "ready": false,
+        "findings": []
+      }
+    },
+    {
+      "source": "Учебные данные фиксированного интервала, не замер производительности",
+      "now_seconds": 100,
+      "calls": [
+        {
+          "service": "checks",
+          "operation": "check_site",
+          "outcome": "ok",
+          "audit_id": "a-41",
+          "correlation_id": "corr-a-41",
+          "duration_ms": 2400
+        },
+        {
+          "service": "checks",
+          "operation": "check_site",
+          "outcome": "ok",
+          "audit_id": "a-42",
+          "correlation_id": "corr-a-42",
+          "duration_ms": 2600,
+          "event_id": "checked-a-42"
+        },
+        {
+          "service": "reports",
+          "operation": "build_report",
+          "outcome": "ok",
+          "audit_id": "a-42",
+          "correlation_id": "corr-a-42",
+          "duration_ms": 10,
+          "event_id": "checked-a-42"
+        }
+      ],
+      "activities": [],
+      "groups": [
+        {
+          "name": "checks-v1",
+          "end": 5,
+          "committed": 5
+        },
+        {
+          "name": "reports-v1",
+          "end": 5,
+          "committed": 5
+        }
+      ],
+      "outboxes": [
+        {
+          "service": "api",
+          "created_seconds": []
+        },
+        {
+          "service": "checks",
+          "created_seconds": []
+        }
+      ],
+      "running": {
+        "api": true,
+        "checks": true,
+        "reports": true
+      },
+      "report": {
+        "audit_id": "a-42",
+        "ready": true,
+        "findings": [
+          {
+            "page_url": "http://localhost:8090/about",
+            "code": "missing-title"
+          },
+          {
+            "page_url": "http://localhost:8090/missing",
+            "code": "http-404"
+          }
+        ]
+      }
+    }
+  ],
+  "broker-down": [
+    {
+      "source": "Учебные данные фиксированного интервала, не замер производительности",
+      "now_seconds": 100,
+      "calls": [
+        {
+          "service": "outbox",
+          "operation": "publish_event",
+          "outcome": "error",
+          "audit_id": "a-42",
+          "correlation_id": "corr-a-42",
+          "duration_ms": 100,
+          "event_id": "created-a-42",
+          "error_kind": "broker_unavailable"
+        }
+      ],
+      "activities": [],
+      "groups": [
+        {
+          "name": "checks-v1",
+          "end": 4,
+          "committed": 4
+        },
+        {
+          "name": "reports-v1",
+          "end": 4,
+          "committed": 4
+        }
+      ],
+      "outboxes": [
+        {
+          "service": "api",
+          "created_seconds": [
+            10
+          ]
+        },
+        {
+          "service": "checks",
+          "created_seconds": []
+        }
+      ],
+      "running": {
+        "api": true,
+        "checks": true,
+        "reports": true
+      },
+      "report": {
+        "audit_id": "a-42",
+        "ready": false,
+        "findings": []
+      }
+    },
+    {
+      "source": "Учебные данные фиксированного интервала, не замер производительности",
+      "now_seconds": 100,
+      "calls": [
+        {
+          "service": "outbox",
+          "operation": "publish_event",
+          "outcome": "error",
+          "audit_id": "a-42",
+          "correlation_id": "corr-a-42",
+          "duration_ms": 100,
+          "event_id": "created-a-42",
+          "error_kind": "broker_unavailable"
+        },
+        {
+          "service": "outbox",
+          "operation": "publish_event",
+          "outcome": "ok",
+          "audit_id": "a-42",
+          "correlation_id": "corr-a-42",
+          "duration_ms": 10,
+          "event_id": "created-a-42"
+        },
+        {
+          "service": "checks",
+          "operation": "check_site",
+          "outcome": "ok",
+          "audit_id": "a-42",
+          "correlation_id": "corr-a-42",
+          "duration_ms": 50,
+          "event_id": "checked-a-42"
+        },
+        {
+          "service": "reports",
+          "operation": "build_report",
+          "outcome": "ok",
+          "audit_id": "a-42",
+          "correlation_id": "corr-a-42",
+          "duration_ms": 10,
+          "event_id": "checked-a-42"
+        }
+      ],
+      "activities": [],
+      "groups": [
+        {
+          "name": "checks-v1",
+          "end": 5,
+          "committed": 5
+        },
+        {
+          "name": "reports-v1",
+          "end": 5,
+          "committed": 5
+        }
+      ],
+      "outboxes": [
+        {
+          "service": "api",
+          "created_seconds": []
+        },
+        {
+          "service": "checks",
+          "created_seconds": []
+        }
+      ],
+      "running": {
+        "api": true,
+        "checks": true,
+        "reports": true
+      },
+      "report": {
+        "audit_id": "a-42",
+        "ready": true,
+        "findings": [
+          {
+            "page_url": "http://localhost:8090/about",
+            "code": "missing-title"
+          },
+          {
+            "page_url": "http://localhost:8090/missing",
+            "code": "http-404"
+          }
+        ]
+      }
+    }
+  ],
+  "reports-stopped": [
+    {
+      "source": "Учебные данные фиксированного интервала, не замер производительности",
+      "now_seconds": 100,
+      "calls": [
+        {
+          "service": "checks",
+          "operation": "check_site",
+          "outcome": "ok",
+          "audit_id": "a-42",
+          "correlation_id": "corr-a-42",
+          "duration_ms": 50,
+          "event_id": "checked-a-42"
+        },
+        {
+          "service": "api",
+          "operation": "get_report",
+          "outcome": "error",
+          "audit_id": "a-42",
+          "correlation_id": "corr-a-42",
+          "duration_ms": 20,
+          "error_kind": "dependency_unavailable"
+        }
+      ],
+      "activities": [],
+      "groups": [
+        {
+          "name": "checks-v1",
+          "end": 5,
+          "committed": 5
+        },
+        {
+          "name": "reports-v1",
+          "end": 5,
+          "committed": 4
+        }
+      ],
+      "outboxes": [
+        {
+          "service": "api",
+          "created_seconds": []
+        },
+        {
+          "service": "checks",
+          "created_seconds": []
+        }
+      ],
+      "running": {
+        "api": true,
+        "checks": true,
+        "reports": false
+      },
+      "report": {
+        "audit_id": "a-42",
+        "ready": false,
+        "findings": []
+      }
+    },
+    {
+      "source": "Учебные данные фиксированного интервала, не замер производительности",
+      "now_seconds": 100,
+      "calls": [
+        {
+          "service": "checks",
+          "operation": "check_site",
+          "outcome": "ok",
+          "audit_id": "a-42",
+          "correlation_id": "corr-a-42",
+          "duration_ms": 50,
+          "event_id": "checked-a-42"
+        },
+        {
+          "service": "api",
+          "operation": "get_report",
+          "outcome": "error",
+          "audit_id": "a-42",
+          "correlation_id": "corr-a-42",
+          "duration_ms": 20,
+          "error_kind": "dependency_unavailable"
+        },
+        {
+          "service": "reports",
+          "operation": "build_report",
+          "outcome": "ok",
+          "audit_id": "a-42",
+          "correlation_id": "corr-a-42",
+          "duration_ms": 10,
+          "event_id": "checked-a-42"
+        }
+      ],
+      "activities": [],
+      "groups": [
+        {
+          "name": "checks-v1",
+          "end": 5,
+          "committed": 5
+        },
+        {
+          "name": "reports-v1",
+          "end": 5,
+          "committed": 5
+        }
+      ],
+      "outboxes": [
+        {
+          "service": "api",
+          "created_seconds": []
+        },
+        {
+          "service": "checks",
+          "created_seconds": []
+        }
+      ],
+      "running": {
+        "api": true,
+        "checks": true,
+        "reports": true
+      },
+      "report": {
+        "audit_id": "a-42",
+        "ready": true,
+        "findings": [
+          {
+            "page_url": "http://localhost:8090/about",
+            "code": "missing-title"
+          },
+          {
+            "page_url": "http://localhost:8090/missing",
+            "code": "http-404"
+          }
+        ]
+      }
+    }
+  ]
+}

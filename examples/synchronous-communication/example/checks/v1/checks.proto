@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package checks.v1;
+option go_package = "hexlet.local/checksrpc/checks/v1;checksv1";
+
+service ChecksService {
+  rpc GetResult(GetResultRequest) returns (GetResultResponse);
+}
+
+message GetResultRequest {
+  string audit_id = 1;
+}
+
+message Finding {
+  string page_url = 1;
+  string code = 2;
+}
+
+message GetResultResponse {
+  string result_id = 1;
+  string audit_id = 2;
+  repeated Finding findings = 3;
+}

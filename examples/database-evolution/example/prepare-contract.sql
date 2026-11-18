@@ -1,0 +1,1 @@
+ALTER TABLE results ALTER COLUMN findings DROP NOT NULL;

@@ -1,0 +1,22 @@
+syntax = "proto3";
+package reports.v1;
+option go_package = "hexlet.local/servicesecurity/reports/v1;reportsv1";
+
+service ReportsService {
+  rpc GetReport(GetReportRequest) returns (GetReportResponse);
+}
+
+message GetReportRequest {
+  string audit_id = 1;
+}
+
+message Finding {
+  string page_url = 1;
+  string code = 2;
+}
+
+message GetReportResponse {
+  string audit_id = 1;
+  bool ready = 2;
+  repeated Finding findings = 3;
+}
