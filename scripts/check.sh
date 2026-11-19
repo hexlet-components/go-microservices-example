@@ -13,7 +13,6 @@ export TRACE_TEST_DATABASE_URL="$AUDIT_TEST_REQUESTS_DSN"
 export RELEASE_TEST_DATABASE_URL="$AUDIT_TEST_REQUESTS_DSN"
 export DATABASE_URL="$AUDIT_TEST_REQUESTS_DSN"
 export KAFKA_BROKERS="$AUDIT_TEST_BROKERS"
-export KAFKA_BROKER="$AUDIT_TEST_BROKERS"
 formatted=$(find examples -name '*.go' -not -path '*/.tools/*' -exec gofmt -l {} +)
 if [ -n "$formatted" ]; then
   echo "$formatted"

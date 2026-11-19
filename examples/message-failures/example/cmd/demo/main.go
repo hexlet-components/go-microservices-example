@@ -12,7 +12,7 @@ import (
 
 func main() {
 	ctx := context.Background()
-	valid := &kgo.Record{Topic: "audit.checked", Partition: 0, Offset: 10, Value: []byte(`{"event_id":"e-10","audit_id":"a-10","result_id":"r-10","findings":[]}`)}
+	valid := &kgo.Record{Topic: "audit-checked", Partition: 0, Offset: 10, Value: []byte(`{"event_id":"e-10","audit_id":"a-10","result_id":"r-10","findings":[]}`)}
 	count := 0
 	processor := failures.Processor{
 		MaxAttempts: 3,
@@ -41,7 +41,7 @@ func main() {
 	if err := processor.Process(ctx, valid); err != nil {
 		log.Fatal(err)
 	}
-	poison := &kgo.Record{Topic: "audit.checked", Partition: 0, Offset: 11, Value: []byte(`{"event_id":"e-bad"}`)}
+	poison := &kgo.Record{Topic: "audit-checked", Partition: 0, Offset: 11, Value: []byte(`{"event_id":"e-bad"}`)}
 	if err := processor.Process(ctx, poison); err != nil {
 		log.Fatal(err)
 	}

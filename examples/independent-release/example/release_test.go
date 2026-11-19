@@ -174,9 +174,9 @@ func reportReady(t *testing.T, apiAddress, id string) {
 
 func TestIndependentRelease(t *testing.T) {
 	dsn := os.Getenv("RELEASE_TEST_DATABASE_URL")
-	broker := os.Getenv("KAFKA_BROKER")
+	broker := os.Getenv("KAFKA_BROKERS")
 	if dsn == "" || broker == "" {
-		t.Skip("RELEASE_TEST_DATABASE_URL and KAFKA_BROKER are required for the process release test")
+		t.Skip("RELEASE_TEST_DATABASE_URL and KAFKA_BROKERS are required for the process release test")
 	}
 	var random [8]byte
 	if _, err := rand.Read(random[:]); err != nil {
@@ -205,7 +205,7 @@ func TestIndependentRelease(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer storeDB.Close()
-	env := []string{"DATABASE_URL=" + testDSN, "KAFKA_BROKER=" + broker, "EVENT_TOPIC=gm.release." + suffix, "CONSUMER_GROUP=gm.release.reports." + suffix}
+	env := []string{"DATABASE_URL=" + testDSN, "KAFKA_BROKERS=" + broker, "EVENT_TOPIC=gm.release." + suffix, "CONSUMER_GROUP=gm.release.reports." + suffix}
 	binDir := t.TempDir()
 	binaries := map[string]string{}
 	for _, item := range []struct{ name, target, version string }{{"checks-v1", "./cmd/checks", "v1"}, {"checks-v2", "./cmd/checks", "v2"}, {"api-v1", "./cmd/api", ""}, {"reports-v1", "./cmd/reports", ""}} {

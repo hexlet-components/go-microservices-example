@@ -88,7 +88,7 @@ func (p Processor) Process(ctx context.Context, record *kgo.Record) error {
 		if err != nil {
 			return err
 		}
-		if err := p.Publish(ctx, record.Topic+".dlt", letter.EventID, bytes); err != nil {
+		if err := p.Publish(ctx, record.Topic+"-dlt", letter.EventID, bytes); err != nil {
 			return fmt.Errorf("publish DLT: %w", err)
 		}
 		// Source progress is saved only after the publisher reports a broker ack.

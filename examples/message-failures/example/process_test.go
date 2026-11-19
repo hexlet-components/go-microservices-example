@@ -11,7 +11,7 @@ import (
 )
 
 func validRecord() *kgo.Record {
-	return &kgo.Record{Topic: "audit.checked", Partition: 2, Offset: 7, Value: []byte(`{"event_id":"e-7","audit_id":"a-7","result_id":"r-7","findings":[]}`)}
+	return &kgo.Record{Topic: "audit-checked", Partition: 2, Offset: 7, Value: []byte(`{"event_id":"e-7","audit_id":"a-7","result_id":"r-7","findings":[]}`)}
 }
 func noWait(context.Context, int) error { return nil }
 
@@ -65,7 +65,7 @@ func TestDeadLetterAckPrecedesSourceCommit(t *testing.T) {
 			if err := json.Unmarshal(value, &letter); err != nil {
 				return err
 			}
-			if topic != "audit.checked.dlt" || key != letter.EventID {
+			if topic != "audit-checked-dlt" || key != letter.EventID {
 				t.Fatalf("topic=%s key=%s", topic, key)
 			}
 			return nil

@@ -9,7 +9,6 @@ export AUDIT_TEST_DATABASE_URL="$AUDIT_TEST_REQUESTS_DSN"
 export OUTBOX_TEST_DATABASE_URL="$AUDIT_TEST_REQUESTS_DSN"
 export DATABASE_URL="$AUDIT_TEST_REQUESTS_DSN"
 export KAFKA_BROKERS="$AUDIT_TEST_BROKERS"
-export KAFKA_BROKER="$AUDIT_TEST_BROKERS"
 for module in basic rpc events isolation consumer outbox failures compatibility migration; do
   echo "Checking $module"
   (cd "$module" && go test -count=1 -race -v ./...)

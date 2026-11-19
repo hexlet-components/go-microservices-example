@@ -14,9 +14,9 @@ import (
 )
 
 func TestKafkaDeadLetterAndSourceProgress(t *testing.T) {
-	broker := os.Getenv("KAFKA_BROKER")
+	broker := os.Getenv("KAFKA_BROKERS")
 	if broker == "" {
-		t.Skip("KAFKA_BROKER is required for the real Kafka integration")
+		t.Skip("KAFKA_BROKERS is required for the real Kafka integration")
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
@@ -27,7 +27,7 @@ func TestKafkaDeadLetterAndSourceProgress(t *testing.T) {
 	}
 	defer admin.Close()
 	request := kmsg.NewPtrCreateTopicsRequest()
-	for _, name := range []string{topic, topic + ".dlt"} {
+	for _, name := range []string{topic, topic + "-dlt"} {
 		request.Topics = append(request.Topics, kmsg.CreateTopicsRequestTopic{Topic: name, NumPartitions: 1, ReplicationFactor: 1})
 	}
 	response, err := admin.Request(ctx, request)
@@ -73,7 +73,7 @@ func TestKafkaDeadLetterAndSourceProgress(t *testing.T) {
 		t.Fatalf("committed=%+v ok=%v", offset, ok)
 	}
 	consumer.AllowRebalance()
-	reader, err := kgo.NewClient(kgo.SeedBrokers(broker), kgo.ConsumePartitions(map[string]map[int32]kgo.Offset{topic + ".dlt": {0: kgo.NewOffset().AtStart()}}))
+	reader, err := kgo.NewClient(kgo.SeedBrokers(broker), kgo.ConsumePartitions(map[string]map[int32]kgo.Offset{topic + "-dlt": {0: kgo.NewOffset().AtStart()}}))
 	if err != nil {
 		t.Fatal(err)
 	}

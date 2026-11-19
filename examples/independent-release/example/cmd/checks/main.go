@@ -28,7 +28,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer db.Close()
-	client, err := kgo.NewClient(kgo.SeedBrokers(release.Env("KAFKA_BROKER", "127.0.0.1:19095")), kgo.RequiredAcks(kgo.AllISRAcks()))
+	client, err := kgo.NewClient(kgo.SeedBrokers(release.Env("KAFKA_BROKERS", "127.0.0.1:19095")), kgo.RequiredAcks(kgo.AllISRAcks()))
 	if err != nil {
 		log.Fatal(err)
 	}

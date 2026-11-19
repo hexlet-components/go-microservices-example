@@ -19,7 +19,7 @@ func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 	topic := release.Env("EVENT_TOPIC", "release.audit-checked")
-	client, err := kgo.NewClient(kgo.SeedBrokers(release.Env("KAFKA_BROKER", "127.0.0.1:19095")), kgo.ConsumeTopics(topic), kgo.ConsumerGroup(release.Env("CONSUMER_GROUP", "release-reports-v1")), kgo.ConsumeResetOffset(kgo.NewOffset().AtStart()), kgo.DisableAutoCommit(), kgo.BlockRebalanceOnPoll())
+	client, err := kgo.NewClient(kgo.SeedBrokers(release.Env("KAFKA_BROKERS", "127.0.0.1:19095")), kgo.ConsumeTopics(topic), kgo.ConsumerGroup(release.Env("CONSUMER_GROUP", "release-reports-v1")), kgo.ConsumeResetOffset(kgo.NewOffset().AtStart()), kgo.DisableAutoCommit(), kgo.BlockRebalanceOnPoll())
 	if err != nil {
 		log.Fatal(err)
 	}
