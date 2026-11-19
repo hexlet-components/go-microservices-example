@@ -10,11 +10,11 @@ case "$(uname -s)/$(uname -m)" in
 esac
 mkdir -p .tools
 if [ ! -x .tools/protoc/bin/protoc ]; then
-  curl -fsSL "https://github.com/protocolbuffers/protobuf/releases/download/v31.1/protoc-31.1-${platform}.zip" -o .tools/protoc.zip
+  curl -fsSL "https://github.com/protocolbuffers/protobuf/releases/download/v36.2/protoc-36.2-${platform}.zip" -o .tools/protoc.zip
   unzip -q .tools/protoc.zip -d .tools/protoc
 fi
-GOBIN="$PWD/.tools" go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.8
-GOBIN="$PWD/.tools" go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.5.1
+GOBIN="$PWD/.tools" go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.12
+GOBIN="$PWD/.tools" go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.6.2
 .tools/protoc/bin/protoc \
   --plugin=protoc-gen-go="$PWD/.tools/protoc-gen-go" \
   --plugin=protoc-gen-go-grpc="$PWD/.tools/protoc-gen-go-grpc" \

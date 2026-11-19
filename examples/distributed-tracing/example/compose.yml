@@ -1,7 +1,7 @@
 name: go-audit-tracing
 services:
   checks-db:
-    image: postgres:18@sha256:2ea8630df176ad090ec92136dee850397c5af8781e4bcf2e4162593691c61bbc
+    image: postgres:18@sha256:e754b839f447639b7004895f4d8a4bfcb4e9dbe3a1bc035f27f646562a16fd61
     environment:
       POSTGRES_DB: checks
       POSTGRES_USER: checks
@@ -13,7 +13,7 @@ services:
       timeout: 2s
       retries: 30
   broker:
-    image: apache/kafka:4.1.1
+    image: apache/kafka:4.4.0
     ports: ["127.0.0.1:19392:19392"]
     environment:
       KAFKA_NODE_ID: 1
@@ -33,7 +33,7 @@ services:
       timeout: 10s
       retries: 40
   collector:
-    image: otel/opentelemetry-collector-contrib:0.136.0
+    image: otel/opentelemetry-collector-contrib:0.165.0
     command: ["--config=/etc/otelcol/config.yml"]
     volumes: ["./collector.yml:/etc/otelcol/config.yml:ro"]
     ports: ["127.0.0.1:14317:4317", "127.0.0.1:13133:13133"]
