@@ -165,7 +165,7 @@ func reportReady(t *testing.T, apiAddress, id string) {
 		if json.Unmarshal(data, &report) != nil || !report.Ready {
 			return false
 		}
-		if report.AuditID != id || len(report.Findings) != 1 || report.Findings[0].Code != "missing-title" || report.Findings[0].PageURL != "http://127.0.0.1:8090/about" {
+		if report.AuditID != id || len(report.Findings) != 1 || report.Findings[0].Code != "missing-content-security-policy" || report.Findings[0].PageURL != "http://127.0.0.1:8090/" {
 			t.Fatalf("wrong report content: %s", data)
 		}
 		return true

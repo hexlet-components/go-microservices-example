@@ -7,7 +7,6 @@ require (
 	github.com/jackc/pgx/v5 v5.13.0
 	github.com/twmb/franz-go v1.22.3
 	github.com/twmb/franz-go/pkg/kmsg v1.15.1
-	golang.org/x/net v0.63.0
 )
 
 require (

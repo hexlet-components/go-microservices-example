@@ -4,8 +4,8 @@
   "result_id": "r-42",
   "findings": [
     {
-      "page_url": "http://localhost:8090/about",
-      "code": "title-absent"
+      "page_url": "http://localhost:8090/",
+      "code": "csp-absent"
     }
   ],
   "rule_version": "2026-11"

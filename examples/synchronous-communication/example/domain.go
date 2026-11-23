@@ -41,7 +41,7 @@ func (FixtureReader) Result(ctx context.Context, id string) (Result, error) {
 	}
 	switch id {
 	case "a-41":
-		return Result{ID: "r-41", AuditID: id, Findings: []Finding{{PageURL: "http://127.0.0.1:8090/about", Code: "missing-title"}}}, nil
+		return Result{ID: "r-41", AuditID: id, Findings: []Finding{{PageURL: "http://127.0.0.1:8090/", Code: "missing-content-security-policy"}}}, nil
 	case "a-42":
 		return Result{}, ErrNotReady
 	default:

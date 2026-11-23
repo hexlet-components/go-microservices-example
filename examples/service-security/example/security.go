@@ -97,7 +97,7 @@ type ReportsServer struct {
 func (*ReportsServer) GetReport(ctx context.Context, request *pb.GetReportRequest) (*pb.GetReportResponse, error) {
 	switch request.GetAuditId() {
 	case "a-1", "a-2":
-		return &pb.GetReportResponse{AuditId: request.GetAuditId(), Ready: true, Findings: []*pb.Finding{{PageUrl: "http://127.0.0.1:8090/about", Code: "missing-title"}}}, nil
+		return &pb.GetReportResponse{AuditId: request.GetAuditId(), Ready: true, Findings: []*pb.Finding{{PageUrl: "http://127.0.0.1:8090/", Code: "missing-content-security-policy"}}}, nil
 	default:
 		return nil, status.Error(codes.NotFound, "report not found")
 	}

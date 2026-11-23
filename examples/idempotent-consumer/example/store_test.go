@@ -47,7 +47,7 @@ func isolatedStore(t *testing.T) (Store, string) {
 func checkedEvent() AuditChecked {
 	return AuditChecked{
 		EventID: "e-42", AuditID: "a-42", ResultID: "r-42",
-		Findings: []Finding{{PageURL: "http://localhost:8090/about", Code: "missing-title"}},
+		Findings: []Finding{{PageURL: "http://localhost:8090/", Code: "missing-content-security-policy"}},
 	}
 }
 

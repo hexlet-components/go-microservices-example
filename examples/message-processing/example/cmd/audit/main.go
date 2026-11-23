@@ -37,15 +37,8 @@ func run(role string) error {
 	}
 	if role == "site" {
 		mux := http.NewServeMux()
-		mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
-			switch r.URL.Path {
-			case "/":
-				fmt.Fprint(w, `<title>Audit fixture</title><a href="/about">About</a><a href="/missing">Missing</a>`)
-			case "/about":
-				fmt.Fprint(w, `<p>No title</p>`)
-			default:
-				http.NotFound(w, r)
-			}
+		mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
+			fmt.Fprint(w, `<title>Audit fixture</title><p>No security headers</p>`)
 		})
 		return http.ListenAndServe("127.0.0.1:8090", mux)
 	}

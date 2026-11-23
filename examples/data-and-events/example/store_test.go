@@ -122,7 +122,7 @@ func TestConcurrentCheckUsesWinnerIdentifiers(t *testing.T) {
 		group.Add(1)
 		go func(i int) {
 			defer group.Done()
-			event, err := store.SaveCheck(context.Background(), "audit-shared", []Finding{{PageURL: "/about", Code: fmt.Sprintf("rule-%d", i)}}, "checked-test")
+			event, err := store.SaveCheck(context.Background(), "audit-shared", []Finding{{PageURL: "/", Code: fmt.Sprintf("rule-%d", i)}}, "checked-test")
 			if err != nil {
 				failures <- err
 			} else {
@@ -269,7 +269,7 @@ func TestRestartAfterAckRepeatsStableEvent(t *testing.T) {
 	checks := testStore(t, "checks")
 	reports := testStore(t, "reports")
 	brokers, topic := kafkaTopic(t)
-	event, err := checks.SaveCheck(context.Background(), "audit-1", []Finding{{PageURL: "/about", Code: "missing-title"}}, topic)
+	event, err := checks.SaveCheck(context.Background(), "audit-1", []Finding{{PageURL: "/", Code: "missing-content-security-policy"}}, topic)
 	if err != nil {
 		t.Fatal(err)
 	}

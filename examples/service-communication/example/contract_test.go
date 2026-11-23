@@ -22,7 +22,7 @@ func TestLocalContract(t *testing.T) {
 	if _, err = client.Result(ctx, "a-42"); !errors.Is(err, ErrNotReady) {
 		t.Fatalf("pending error=%v", err)
 	}
-	client.Complete(Result{ID: "r-42", AuditID: "a-42", Findings: []Finding{{PageURL: "http://localhost:8090/about", Code: "missing-title"}}})
+	client.Complete(Result{ID: "r-42", AuditID: "a-42", Findings: []Finding{{PageURL: "http://localhost:8090/", Code: "missing-content-security-policy"}}})
 	result, err := client.Result(ctx, "a-42")
 	if err != nil || result.ID != "r-42" || len(result.Findings) != 1 {
 		t.Fatalf("result=%+v error=%v", result, err)

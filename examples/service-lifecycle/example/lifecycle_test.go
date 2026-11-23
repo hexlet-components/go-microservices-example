@@ -277,7 +277,7 @@ func TestSIGTERMDuringReportPersistence(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer lock.ExecContext(context.Background(), "SELECT pg_advisory_unlock($1)", config.LockKey)
-	publish(t, client, config.Topic, AuditChecked{EventID: "e-42", AuditID: "a-42", ResultID: "r-42", Findings: []Finding{{PageURL: "http://fixture/about", Code: "missing-title"}}})
+	publish(t, client, config.Topic, AuditChecked{EventID: "e-42", AuditID: "a-42", ResultID: "r-42", Findings: []Finding{{PageURL: "http://fixture/", Code: "missing-content-security-policy"}}})
 	child := startChild(t, config)
 	child.awaitPhase(t, "report-persist")
 	began := time.Now()

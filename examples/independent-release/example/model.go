@@ -34,7 +34,7 @@ func ConsumeV1(data []byte) (Report, error) {
 		return Report{}, errors.New("missing event identity")
 	}
 	for _, f := range event.Findings {
-		if f.Code != "missing-title" && f.Code != "http-404" {
+		if f.Code != "missing-content-security-policy" && f.Code != "missing-content-type-options" {
 			return Report{}, errors.New("unknown finding")
 		}
 	}

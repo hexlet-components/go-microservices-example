@@ -119,12 +119,12 @@
         "ready": true,
         "findings": [
           {
-            "page_url": "http://localhost:8090/about",
-            "code": "missing-title"
+            "page_url": "http://localhost:8090/",
+            "code": "missing-content-security-policy"
           },
           {
-            "page_url": "http://localhost:8090/missing",
-            "code": "http-404"
+            "page_url": "http://localhost:8090/",
+            "code": "missing-content-type-options"
           }
         ]
       }
@@ -257,12 +257,12 @@
         "ready": true,
         "findings": [
           {
-            "page_url": "http://localhost:8090/about",
-            "code": "missing-title"
+            "page_url": "http://localhost:8090/",
+            "code": "missing-content-security-policy"
           },
           {
-            "page_url": "http://localhost:8090/missing",
-            "code": "http-404"
+            "page_url": "http://localhost:8090/",
+            "code": "missing-content-type-options"
           }
         ]
       }
@@ -391,12 +391,12 @@
         "ready": true,
         "findings": [
           {
-            "page_url": "http://localhost:8090/about",
-            "code": "missing-title"
+            "page_url": "http://localhost:8090/",
+            "code": "missing-content-security-policy"
           },
           {
-            "page_url": "http://localhost:8090/missing",
-            "code": "http-404"
+            "page_url": "http://localhost:8090/",
+            "code": "missing-content-type-options"
           }
         ]
       }

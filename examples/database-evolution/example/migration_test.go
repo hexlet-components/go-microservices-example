@@ -114,8 +114,8 @@ func TestMixedVersionsAndRollback(t *testing.T) {
 	newServer := httptest.NewServer(next.Handler())
 	t.Cleanup(newServer.Close)
 	t.Logf("v1=%s v2=%s (explicit client addresses)", oldServer.URL, newServer.URL)
-	first := []Finding{{PageURL: "http://localhost:8090/about", Code: "missing-title"}}
-	changed := []Finding{{PageURL: "http://localhost:8090/missing", Code: "http-404"}}
+	first := []Finding{{PageURL: "http://localhost:8090/", Code: "missing-content-security-policy"}}
+	changed := []Finding{{PageURL: "http://localhost:8090/", Code: "missing-content-type-options"}}
 	put(t, newServer.URL, first)
 	// A still-running old version updates only the old column.
 	put(t, oldServer.URL, changed)

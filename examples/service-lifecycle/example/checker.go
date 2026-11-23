@@ -2,46 +2,72 @@ package lifecycle
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
-
-	"golang.org/x/net/html"
 )
 
-// Page and the parser belong to the prepared loader.
+const (
+	// CertificateWarning is how long before expiry a certificate becomes a finding.
+	CertificateWarning = 14 * 24 * time.Hour
+	// SlowResponseLimit is the longest acceptable time to load the page.
+	SlowResponseLimit = time.Second
+)
+
+// Page holds what the prepared loader measured for the requested page.
 type Page struct {
-	URL            string
-	Title          string
-	HasDescription bool
-	Links          []string
+	URL               string
+	Header            http.Header
+	Elapsed           time.Duration
+	CertificateExpiry time.Time
+	CheckedAt         time.Time
 }
 
 type Rule func(Page) []Finding
 
-func MissingTitle(p Page) []Finding {
-	if p.Title == "" {
-		return []Finding{{PageURL: p.URL, Code: "missing-title"}}
+func ExpiringCertificate(p Page) []Finding {
+	if !p.CertificateExpiry.IsZero() && p.CertificateExpiry.Sub(p.CheckedAt) < CertificateWarning {
+		return []Finding{{PageURL: p.URL, Code: "tls-expires-soon"}}
 	}
 	return nil
 }
 
-func MissingDescription(p Page) []Finding {
-	if !p.HasDescription {
-		return []Finding{{PageURL: p.URL, Code: "missing-description"}}
+func SlowResponse(p Page) []Finding {
+	if p.Elapsed > SlowResponseLimit {
+		return []Finding{{PageURL: p.URL, Code: "slow-response"}}
+	}
+	return nil
+}
+
+func MissingContentSecurityPolicy(p Page) []Finding {
+	if strings.TrimSpace(p.Header.Get("Content-Security-Policy")) == "" {
+		return []Finding{{PageURL: p.URL, Code: "missing-content-security-policy"}}
+	}
+	return nil
+}
+
+func MissingContentTypeOptions(p Page) []Finding {
+	if !strings.EqualFold(strings.TrimSpace(p.Header.Get("X-Content-Type-Options")), "nosniff") {
+		return []Finding{{PageURL: p.URL, Code: "missing-content-type-options"}}
+	}
+	return nil
+}
+
+func MissingReferrerPolicy(p Page) []Finding {
+	if strings.TrimSpace(p.Header.Get("Referrer-Policy")) == "" {
+		return []Finding{{PageURL: p.URL, Code: "missing-referrer-policy"}}
 	}
 	return nil
 }
 
 type Checker struct {
-	Origin   *url.URL
-	Client   *http.Client
-	Rules    []Rule
-	MaxPages int
+	Origin *url.URL
+	Client *http.Client
+	Rules  []Rule
+	Now    func() time.Time
 }
 
 func NewChecker(origin string) (*Checker, error) {
@@ -52,9 +78,13 @@ func NewChecker(origin string) (*Checker, error) {
 	u.Path = ""
 	u.RawQuery = ""
 	u.Fragment = ""
-	c := &Checker{Origin: u, Rules: []Rule{MissingTitle}, MaxPages: 5}
+	c := &Checker{
+		Origin: u,
+		Rules:  []Rule{ExpiringCertificate, SlowResponse, MissingContentSecurityPolicy, MissingContentTypeOptions},
+		Now:    time.Now,
+	}
 	c.Client = &http.Client{
-		Timeout:   500 * time.Millisecond,
+		Timeout:   2 * time.Second,
 		Transport: &http.Transport{Proxy: nil},
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
 			if len(via) >= 5 || !c.Allowed(req.URL) {
@@ -70,128 +100,52 @@ func (c *Checker) Allowed(u *url.URL) bool {
 	return u.User == nil && u.Scheme == c.Origin.Scheme && u.Host == c.Origin.Host
 }
 
+// Check loads exactly one page and applies the rules to the response.
 func (c *Checker) Check(ctx context.Context, target string) ([]Finding, error) {
-	start, err := url.Parse(target)
-	if err != nil || !c.Allowed(start) {
+	u, err := url.Parse(target)
+	if err != nil || !c.Allowed(u) {
 		return nil, ErrInvalid
 	}
-	queue := []*url.URL{start}
-	seen := map[string]bool{}
-	findings := make([]Finding, 0)
-	for len(queue) > 0 && len(seen) < c.MaxPages {
-		if err := ctx.Err(); err != nil {
-			return nil, err
-		}
-		u := queue[0]
-		queue = queue[1:]
-		u.Fragment = ""
-		if seen[u.String()] {
-			continue
-		}
-		seen[u.String()] = true
-		req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
-		if err != nil {
-			return nil, err
-		}
-		response, err := c.Client.Do(req)
-		if err != nil {
-			if ctx.Err() != nil {
-				return nil, ctx.Err()
-			}
-			// A failed bounded fetch of an allowed page is an audit finding.
-			findings = append(findings, Finding{PageURL: u.String(), Code: "load-error"})
-			continue
-		}
-		page, readErr := readPage(u.String(), response.Body)
+	u.Fragment = ""
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+	started := time.Now()
+	response, err := c.Client.Do(req)
+	if err == nil {
+		const maxBytes = 1 << 20
+		_, err = io.Copy(io.Discard, io.LimitReader(response.Body, maxBytes))
 		response.Body.Close()
-		if readErr != nil {
-			if ctx.Err() != nil {
-				return nil, ctx.Err()
-			}
-			findings = append(findings, Finding{PageURL: u.String(), Code: "load-error"})
-			continue
+	}
+	elapsed := time.Since(started)
+	if err != nil {
+		if ctx.Err() != nil {
+			return nil, ctx.Err()
 		}
-		if response.StatusCode >= 400 {
-			findings = append(findings, Finding{PageURL: u.String(), Code: fmt.Sprintf("http-%d", response.StatusCode)})
-			continue
-		}
-		for _, rule := range c.Rules {
-			findings = append(findings, rule(page)...)
-		}
-		for _, link := range page.Links {
-			relative, err := url.Parse(link)
-			if err != nil {
-				continue
-			}
-			next := u.ResolveReference(relative)
-			if c.Allowed(next) {
-				queue = append(queue, next)
-			}
-		}
+		// A failed bounded load of the requested page is an audit finding.
+		return []Finding{{PageURL: u.String(), Code: "unavailable"}}, nil
+	}
+	if response.StatusCode >= 500 {
+		return []Finding{{PageURL: u.String(), Code: "unavailable"}}, nil
+	}
+	page := Page{URL: u.String(), Header: response.Header, Elapsed: elapsed, CheckedAt: c.Now()}
+	if response.TLS != nil && len(response.TLS.PeerCertificates) > 0 {
+		page.CertificateExpiry = response.TLS.PeerCertificates[0].NotAfter
+	}
+	findings := make([]Finding, 0)
+	for _, rule := range c.Rules {
+		findings = append(findings, rule(page)...)
 	}
 	return findings, nil
 }
 
-func readPage(address string, body io.Reader) (Page, error) {
-	const maxBytes = 1 << 20
-	bytes, err := io.ReadAll(io.LimitReader(body, maxBytes+1))
-	if err != nil {
-		return Page{}, err
-	}
-	if len(bytes) > maxBytes {
-		return Page{}, errors.New("page exceeds fixture size")
-	}
-	document, err := html.Parse(strings.NewReader(string(bytes)))
-	if err != nil {
-		return Page{}, err
-	}
-	page := Page{URL: address}
-	var walk func(*html.Node)
-	walk = func(n *html.Node) {
-		if n.Type == html.ElementNode {
-			switch n.Data {
-			case "title":
-				if n.FirstChild != nil {
-					page.Title = strings.TrimSpace(n.FirstChild.Data)
-				}
-			case "a":
-				for _, a := range n.Attr {
-					if a.Key == "href" {
-						page.Links = append(page.Links, a.Val)
-					}
-				}
-			case "meta":
-				name, content := "", ""
-				for _, a := range n.Attr {
-					if a.Key == "name" {
-						name = a.Val
-					}
-					if a.Key == "content" {
-						content = a.Val
-					}
-				}
-				if strings.EqualFold(name, "description") && strings.TrimSpace(content) != "" {
-					page.HasDescription = true
-				}
-			}
-		}
-		for child := n.FirstChild; child != nil; child = child.NextSibling {
-			walk(child)
-		}
-	}
-	walk(document)
-	return page, nil
-}
-
+// Fixture serves the local page. It sends a title but no security headers.
 func Fixture() http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		io.WriteString(w, `<!doctype html><html><head><title>Учебный сайт</title><meta name="description" content="Локальный сайт для аудита"></head><body><a href="/about">О сайте</a><a href="/missing">Отсутствующая страница</a></body></html>`)
-	})
-	mux.HandleFunc("GET /about", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		io.WriteString(w, `<!doctype html><html><head></head><body>О сайте</body></html>`)
+		io.WriteString(w, `<!doctype html><html><head><title>Учебный сайт</title></head><body>Локальная страница для аудита</body></html>`)
 	})
 	return mux
 }

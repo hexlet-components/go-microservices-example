@@ -34,7 +34,7 @@ func (s Store) Fixture(ctx context.Context, id string) error {
 	if id == "" || len(id) > 64 {
 		return fmt.Errorf("invalid fixture ID")
 	}
-	findings := []Finding{{PageURL: "http://127.0.0.1:8090/about", Code: "missing-title"}}
+	findings := []Finding{{PageURL: "http://127.0.0.1:8090/", Code: "missing-content-security-policy"}}
 	data, err := json.Marshal(findings)
 	if err != nil {
 		return err

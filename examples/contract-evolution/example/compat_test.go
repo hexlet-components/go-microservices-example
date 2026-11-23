@@ -25,7 +25,7 @@ func TestEventVersionMatrix(t *testing.T) {
 				if err != nil {
 					t.Fatal(err)
 				}
-				want := Report{AuditID: "a-42", Ready: true, Findings: []Finding{{PageURL: "http://localhost:8090/about", Code: "missing-title"}}}
+				want := Report{AuditID: "a-42", Ready: true, Findings: []Finding{{PageURL: "http://localhost:8090/", Code: "missing-content-security-policy"}}}
 				if !reflect.DeepEqual(got, want) {
 					t.Fatalf("report=%+v", got)
 				}

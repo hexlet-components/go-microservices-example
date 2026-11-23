@@ -112,7 +112,7 @@ func Run(lifetime context.Context, store Outbox, p Providers, brokers []string, 
 	var response wrapperspb.StringValue
 	err = client.Invoke(metadata.AppendToOutgoingContext(checkCtx, "authorization", "Bearer "+token), method, wrapperspb.String(auditID), &response)
 	if err == nil {
-		event := AuditChecked{AuditID: auditID, ResultID: "result-" + auditID, EventID: "checked-" + auditID, Findings: []Finding{{PageURL: response.Value + "about", Code: "missing-title"}}}
+		event := AuditChecked{AuditID: auditID, ResultID: "result-" + auditID, EventID: "checked-" + auditID, Findings: []Finding{{PageURL: response.Value, Code: "missing-content-security-policy"}}}
 		carrier := propagation.MapCarrier{}
 		propagator.Inject(checkCtx, carrier)
 		err = store.Save(checkCtx, Envelope{Event: event, Carrier: carrier})

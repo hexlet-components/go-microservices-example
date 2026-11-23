@@ -104,14 +104,7 @@ func TestRealPipeline(t *testing.T) {
 		request.RequestWith(cleanup, producer)
 	}()
 	fixture := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		switch r.URL.Path {
-		case "/":
-			w.Write([]byte(`<title>Fixture</title><a href="/about">About</a><a href="/missing">Missing</a>`))
-		case "/about":
-			w.Write([]byte(`<p>No title</p>`))
-		default:
-			http.NotFound(w, r)
-		}
+		w.Write([]byte(`<title>Fixture</title><p>No security headers</p>`))
 	}))
 	defer fixture.Close()
 	checker, err := NewChecker(fixture.URL)
@@ -206,7 +199,7 @@ func TestRealPipeline(t *testing.T) {
 			for _, f := range report.Findings {
 				codes[f.Code] = true
 			}
-			if !codes["missing-title"] || !codes["http-404"] {
+			if !codes["missing-content-security-policy"] || !codes["missing-content-type-options"] {
 				t.Fatal(report.Findings)
 			}
 			break

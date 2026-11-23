@@ -41,7 +41,7 @@ func TestRPCResultContract(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if result.ID != "r-41" || result.AuditID != "a-41" || len(result.Findings) != 1 || result.Findings[0].Code != "missing-title" {
+	if result.ID != "r-41" || result.AuditID != "a-41" || len(result.Findings) != 1 || result.Findings[0].Code != "missing-content-security-policy" {
 		t.Fatalf("result=%+v", result)
 	}
 	_, err = reader.Result(ctx, "a-42")

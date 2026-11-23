@@ -6,7 +6,6 @@ require (
 	github.com/jackc/pgx/v5 v5.13.0
 	github.com/twmb/franz-go v1.22.3
 	github.com/twmb/franz-go/pkg/kmsg v1.15.1
-	golang.org/x/net v0.63.0
 	google.golang.org/grpc v1.85.0
 )
 
@@ -16,6 +15,7 @@ require (
 	github.com/jackc/puddle/v2 v2.2.4 // indirect
 	github.com/klauspost/compress v1.20.4 // indirect
 	github.com/pierrec/lz4/v4 v4.1.33 // indirect
+	golang.org/x/net v0.63.0 // indirect
 	golang.org/x/sync v0.25.0 // indirect
 	golang.org/x/sys v0.50.0 // indirect
 	golang.org/x/text v0.44.0 // indirect

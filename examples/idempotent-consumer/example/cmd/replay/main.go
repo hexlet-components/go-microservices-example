@@ -33,7 +33,7 @@ func main() {
 	}
 	event := demo.AuditChecked{
 		EventID: *eventID, AuditID: "a-42", ResultID: "r-42",
-		Findings: []demo.Finding{{PageURL: "http://localhost:8090/about", Code: "missing-title"}},
+		Findings: []demo.Finding{{PageURL: "http://localhost:8090/", Code: "missing-content-security-policy"}},
 	}
 	applied, err := store.Apply(ctx, "reports-v1", event)
 	if err != nil {

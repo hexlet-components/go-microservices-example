@@ -4,8 +4,8 @@
   "result_id": "r-42",
   "findings": [
     {
-      "page_url": "http://localhost:8090/about",
-      "code": "missing-title"
+      "page_url": "http://localhost:8090/",
+      "code": "missing-content-security-policy"
     }
   ]
 }
